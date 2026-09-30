@@ -17,16 +17,20 @@ import jwt from "jsonwebtoken";
 const app = express();
 
 
-console.log("CLIENT_URL:", process.env.CLIENT_URL);
+
 // Database
 connectDB();
+console.log("CLIENT_URL:", process.env.CLIENT_URL);
 
 const httpServer = createServer(app);
 
+
+console.log("SOCKET CLIENT_URL:", process.env.CLIENT_URL);
 const io = new Server(httpServer, {
   cors: {
     origin: process.env.CLIENT_URL,
     methods: ["GET", "POST"],
+    credentials: true,
   },
 });
 
