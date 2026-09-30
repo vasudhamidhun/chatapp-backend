@@ -118,6 +118,8 @@ app.get("/", (req, res) => {
   res.send("ChatApp Server Running");
 });
 
-httpServer.listen(process.env.PORT, () => {
-  console.log("Server running on port 5000");
+const PORT = process.env.PORT || 5000;
+
+httpServer.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
