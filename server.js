@@ -16,6 +16,8 @@ import jwt from "jsonwebtoken";
 
 const app = express();
 
+
+console.log("CLIENT_URL:", process.env.CLIENT_URL);
 // Database
 connectDB();
 
