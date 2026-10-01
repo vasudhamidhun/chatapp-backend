@@ -44,7 +44,9 @@ io.on("connection", (socket) => {
   // Join user's private room
   socket.join(socket.userId.toString());
 
-  console.log(`User joined room: ${socket.userId}`);
+  // console.log(`User joined room: ${socket.userId}`);
+  // console.log("User joined room:", socket.userId.toString());
+  // console.log("Socket ID:", socket.id);
 
   // Real-time message
   socket.on("send_message", async (data) => {
@@ -71,6 +73,45 @@ io.on("connection", (socket) => {
       console.error("Socket message error:", error);
     }
   });
+  
+
+  //Real-time call  listen for coming call
+
+socket.on("call-user", ({ to, offer }) => {
+  console.log("📞 Call request received for:", to);
+
+  const receiverRoom = io.sockets.adapter.rooms.get(to);
+
+  console.log("Receiver room:", receiverRoom);
+
+  io.to(to).emit("incoming-call", {
+    from: socket.userId,
+    offer,
+  });
+
+  console.log("✅ incoming-call emitted");
+});
+
+
+// ice candidate for  audio
+socket.on("ice-candidate", ({ to, candidate }) => {
+  console.log("🧊 ICE candidate received from:", socket.userId);
+  console.log("Sending ICE candidate to:", to);
+
+  io.to(to).emit("ice-candidate", {
+    candidate,
+  });
+});
+
+// real time call  listen for answer call
+socket.on("answer-call", ({ to, answer }) => {
+  console.log("📞 Answer received from:", socket.userId);
+  console.log("Sending answer to:", to);
+
+  io.to(to).emit("call-answered", {
+    answer,
+  });
+});
 
   socket.on("disconnect", () => {
     console.log("User disconnected:", socket.userId);
