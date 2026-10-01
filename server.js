@@ -113,6 +113,24 @@ socket.on("answer-call", ({ to, answer }) => {
   });
 });
 
+// reject call 
+socket.on("reject-call", ({ to }) => {
+  console.log("❌ Call rejected by:", socket.userId);
+
+  io.to(to).emit("call-rejected");
+});
+
+
+//end call  
+
+socket.on("end-call", ({ to }) => {
+  console.log("📴 Call ended by:", socket.userId);
+  console.log("Sending call-ended to:", to);
+
+  io.to(to).emit("call-ended");
+});
+
+// user disconnection
   socket.on("disconnect", () => {
     console.log("User disconnected:", socket.userId);
   });
